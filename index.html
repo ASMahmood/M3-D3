@@ -174,7 +174,9 @@
             them in a cool way!
           </p>
           <p>
-            <a href="#" class="btn btn-primary my-2">Load Images</a>
+            <a href="#" class="btn btn-primary my-2" onclick="loadPrimary()"
+              >Load Images</a
+            >
             <a href="#" class="btn btn-secondary my-2">Load Secondary Images</a>
           </p>
         </div>
@@ -615,6 +617,35 @@
         </p>
       </div>
     </footer>
+    <script>
+      function loadPrimary() {
+        fetch("http://www.splashbase.co/api/v1/images/search?query=cars", {
+          method: "GET",
+        })
+          .then((response) => response.json())
+          .then((parsedJson) => {
+            //MAKE AN ARRAY OF THE IMAGES
+            const imageArray = parsedJson.images;
+            console.log(imageArray);
+            //MAKE AN ARRAY OF THE CARDS
+            let cards = document.querySelectorAll(".card");
+            console.log(cards);
+            //FOR LOOP TO REPLACE CARD IMAGES
+            for (let i = 0; i < cards.length; i++) {
+              //DEFINES CARDS CURRENT IMAGE
+              let cardSVG = cards[i].firstElementChild;
+              console.log(cardSVG);
+              //DEFINES CARD NEW IMAGE
+              let cardImg = document.createElement("img");
+              cardImg.src = imageArray[i].url;
+              //SETS FIXED IMAGE HEIGHT
+              cardImg.height = 225;
+              //REPLACES OLD IMAGE WITH NEW IMAGE
+              cards[i].replaceChild(cardImg, cardSVG);
+            }
+          });
+      }
+    </script>
     <script
       src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
       integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

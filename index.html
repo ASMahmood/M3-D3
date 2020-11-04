@@ -177,7 +177,7 @@
             <a href="#" class="btn btn-primary my-2" onclick="loadPrimary()"
               >Load Images</a
             >
-            <a href="#" class="btn btn-secondary my-2">Load Secondary Images</a>
+            <a href="#" class="btn btn-secondary my-2" onclick="loadSecondary()">Load Secondary Images</a>
           </p>
         </div>
       </section>
@@ -643,6 +643,34 @@
               cards[i].replaceChild(newImg, oldImg);
             }
           });
+      }
+
+      function loadSecondary(){
+       fetch("http://www.splashbase.co/api/v1/images/search?query=animals",{
+         method: "GET",
+       }).then((response)=>response.json()).then((body)=>{
+         let imgArray2= body.images;
+         let cards= document.querySelectorAll(".card")
+let oldImg= document.querySelectorAll(".card > :first-child")
+
+console.log(oldImg)
+         for(let i=0; i<imgArray2.length; i++){
+          let newImg= document.createElement("img")
+          let imgUrl= imgArray2[i].url
+          newImg.src= imgUrl
+          newImg.height= 200
+          let elementCardi= oldImg[i]
+          console.log(elementCardi)
+
+   
+          cards[i].replaceChild(newImg, elementCardi)
+
+          
+         }
+         
+         (console.log(imgArray2))})
+       
+
       }
     </script>
     <script

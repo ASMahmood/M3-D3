@@ -623,25 +623,24 @@
           method: "GET",
         })
           .then((response) => response.json())
-          .then((parsedJson) => {
-            //MAKE AN ARRAY OF THE IMAGES
-            const imageArray = parsedJson.images;
-            console.log(imageArray);
-            //MAKE AN ARRAY OF THE CARDS
+          .then((body) => {
+            console.log(body);
+            const imgArray = body.images;
+            console.log(imgArray);
+
             let cards = document.querySelectorAll(".card");
-            console.log(cards);
-            //FOR LOOP TO REPLACE CARD IMAGES
-            for (let i = 0; i < cards.length; i++) {
-              //DEFINES CARDS CURRENT IMAGE
-              let cardSVG = cards[i].firstElementChild;
-              console.log(cardSVG);
-              //DEFINES CARD NEW IMAGE
-              let cardImg = document.createElement("img");
-              cardImg.src = imageArray[i].url;
-              //SETS FIXED IMAGE HEIGHT
-              cardImg.height = 225;
-              //REPLACES OLD IMAGE WITH NEW IMAGE
-              cards[i].replaceChild(cardImg, cardSVG);
+
+            for (let i = 0; i < imgArray.length; i++) {
+              let newImgSrc = imgArray[i].url;
+              console.log(newImgSrc);
+
+              let newImg = document.createElement("img");
+              newImg.src = newImgSrc;
+              newImg.height = 200;
+
+              let oldImg = cards[i].firstElementChild;
+
+              cards[i].replaceChild(newImg, oldImg);
             }
           });
       }

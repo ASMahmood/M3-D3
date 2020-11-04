@@ -177,7 +177,9 @@
             <a href="#" class="btn btn-primary my-2" onclick="loadPrimary()"
               >Load Images</a
             >
-            <a href="#" class="btn btn-secondary my-2" onclick="loadSecondary()">Load Secondary Images</a>
+            <a href="#" class="btn btn-secondary my-2" onclick="loadSecondary()"
+              >Load Secondary Images</a
+            >
           </p>
         </div>
       </section>
@@ -618,6 +620,39 @@
       </div>
     </footer>
     <script>
+      window.onload = function () {
+        let viewButtons = document.querySelectorAll(
+          ".card-body .btn-group > :first-child"
+        );
+        console.log(viewButtons);
+        for (let i = 0; i < viewButtons.length; i++) {
+          let currentButton = viewButtons[i];
+          let coin = "red";
+          currentButton.setAttribute("data-toggle", "modal");
+          currentButton.setAttribute("data-target", `#picModal${i}`);
+        }
+
+        let cards = document.querySelectorAll(".card");
+
+        for (let i = 0; i < cards.length; i++) {
+          let modal = document.createElement("div");
+          let img = cards[i].firstElementChild;
+          console.log(img);
+          let src = img.src;
+          modal.innerHTML = `
+            <div class="modal fade" id="picModal${i}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      ${img}
+    </div>
+  </div>
+</div>
+         `;
+
+          cards[i].appendChild(modal);
+        }
+      };
+
       function loadPrimary() {
         fetch("http://www.splashbase.co/api/v1/images/search?query=cars", {
           method: "GET",
@@ -641,36 +676,58 @@
               let oldImg = cards[i].firstElementChild;
 
               cards[i].replaceChild(newImg, oldImg);
+
+              let modal = cards[i].lastElementChild;
+              modal.innerHTML = `
+            <div class="modal fade" id="picModal${i}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <img src="${newImgSrc}" height="200px">
+                    </div>
+                </div>
+            </div>`;
+
+              cards[i].appendChild(modal);
             }
           });
       }
 
-      function loadSecondary(){
-       fetch("http://www.splashbase.co/api/v1/images/search?query=animals",{
-         method: "GET",
-       }).then((response)=>response.json()).then((body)=>{
-         let imgArray2= body.images;
-         let cards= document.querySelectorAll(".card")
-let oldImg= document.querySelectorAll(".card > :first-child")
+      function loadSecondary() {
+        fetch("http://www.splashbase.co/api/v1/images/search?query=animals", {
+          method: "GET",
+        })
+          .then((response) => response.json())
+          .then((body) => {
+            let imgArray2 = body.images;
+            let cards = document.querySelectorAll(".card");
+            let oldImg = document.querySelectorAll(".card > :first-child");
 
-console.log(oldImg)
-         for(let i=0; i<imgArray2.length; i++){
-          let newImg= document.createElement("img")
-          let imgUrl= imgArray2[i].url
-          newImg.src= imgUrl
-          newImg.height= 200
-          let elementCardi= oldImg[i]
-          console.log(elementCardi)
+            console.log(oldImg);
+            for (let i = 0; i < imgArray2.length; i++) {
+              let newImg = document.createElement("img");
+              let imgUrl = imgArray2[i].url;
+              newImg.src = imgUrl;
+              newImg.height = 200;
+              let elementCardi = oldImg[i];
+              console.log(elementCardi);
 
-   
-          cards[i].replaceChild(newImg, elementCardi)
+              cards[i].replaceChild(newImg, elementCardi);
 
-          
-         }
-         
-         (console.log(imgArray2))})
-       
+              let modal = cards[i].lastElementChild;
+              modal.innerHTML = `
+            <div class="modal fade" id="picModal${i}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <img src="${imgUrl}" height="200px">
+                    </div>
+                </div>
+            </div>`;
 
+              cards[i].appendChild(modal);
+            }
+
+            console.log(imgArray2);
+          });
       }
     </script>
     <script
